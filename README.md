@@ -11,3 +11,6 @@ A set of shell scripts, dotfiles, and configurations which I use and want to sha
 
 - **gen_slides_docs_letters.sh**: This is a script which automatically generates my slides, documents, letters of recommendation, and more.
 
+### cad_3dmodels
+
+- **spectrogram_creation**: This code and image are a companion to [How to make a spectrogram into a 3D Printed Physical Object](https://savethevowels.org/posts/spectrogram_to_stl.html).
