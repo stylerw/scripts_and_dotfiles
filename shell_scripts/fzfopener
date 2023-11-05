@@ -1,0 +1,36 @@
+#!/bin/bash
+vim=0
+ripdrag=0
+kwrite=0
+open=0
+dolphin=0
+while getopts 'rkvod' OPTION; do
+   case "$OPTION" in
+      r) ripdrag=1;;
+      k) kwrite=1;;
+      v) vim=1;;
+      o) open=1;;
+      d) dolphin=1;;
+      ?) # Invalid option
+         echo "Invalid Option"
+         exit;;
+   esac
+done
+cd $HOME/Documents
+local output
+output=$(fzf)
+if [[ $vim == 1 ]]; then
+    nvim ${output} && exit
+fi
+if [[ $open == 1 ]]; then
+    setsid xdg-open ${output} && exit
+fi
+if [[ $kwrite == 1 ]]; then
+    /usr/bin/kwrite ${output} &>/dev/null && exit
+fi
+if [[ $dolphin == 1 ]]; then
+    setsid dolphin --select ${output} && exit
+fi
+if [[ $ripdrag == 1 ]]; then
+    $HOME/Documents/bin/ripdrag ${output}
+fi
