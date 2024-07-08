@@ -1,0 +1,310 @@
+#! App Launchers
+
+ac!! cmus
+ao!! ~/Documents/bin/osoff
+al!! nohup ~/Documents/bin/gobble ~/Documents/bin/bin/lmstudio.appimage &
+ab!! nohup ~/Documents/bin/gobble flatpak run org.mozilla.Thunderbird &
+az!! nohup ~/Documents/bin/gobble flatpak run us.zoom.Zoom &
+ap!! nohup ~/Documents/bin/gobble ~/Documents/bin/praat &
+ar!! nohup ~/Documents/bin/gobble ~/.local/bin/recoll &
+
+---
+
+#! Website Launchers
+
+on!! nohup ~/Documents/bin/gobble flatpak run com.google.Chrome --args --profile-directory="Profile 1" &
+og!! ~/Documents/bin/gobble firefox -P "ucsd" -url https://chat.openai.com?model=gpt-4o
+oh!! nohup ~/Documents/bin/gobble flatpak run com.brave.Browser 'https://hackernews.com' &
+
+---
+
+#! File Edits
+
+xx!! nvim /tmp/temp.txt
+xl!! nvim ~/Documents/bin/launcher.txt
+xz!! nvim ~/Documents/bin/zshrc
+xn!! nvim ~/Documents/text/notes.md
+
+---
+
+#! Folder Openers
+
+dh!! nohup ~/Documents/bin/gobble dolphin ~ &
+dd!! nohup ~/Documents/bin/gobble dolphin ~/Downloads &
+db!! nohup ~/Documents/bin/gobble dolphin ~/Documents/bin &
+dl!! nohup ~/Documents/bin/gobble dolphin ~/Documents/talks &
+dth!! nohup ~/Documents/bin/gobble dolphin ~/transfer &
+
+---
+
+#! Snippets
+
+ns!! printf "%s\n" "----------------------------" "Dr. Will Styler" "Director, UCSD Computational Social Sciences Program - http://css.ucsd.edu" "Assoc. Teaching Professor, Department of Linguistics" "Office: AP&M 4151 - http://savethevowels.org" | wl-copy
+nr!! wl-copy "<img class='r-stretch' src=''>"
+nz!! wl-copy "https://ucsd.zoom.us/my/wstyler"
+nb!! wl-copy "book a time at <https://savethevowels.org/bookme>."
+
+---
+
+#! Lock Session
+
+q!! loginctl lock-session
+
+---
+
+#! Take Rectangular Screenshot
+
+r!! nohup ~/Documents/bin/gobble spectacle -rb &
+
+---
+
+#! rimg
+
+<img class='r-stretch' src=''>
+
+---
+
+#! Update Firmwares
+
+!r sudo fwupdmgr --force refresh && sudo fwupdmgr update && read
+
+---
+
+#! video insert
+
+<video class="r-stretch" controls src=""></video>
+
+---
+
+#! Get wifi strength
+
+!r nmcli dev wifi
+
+---
+
+#! vim replace in folder
+
+:cd {path to root directory}
+:vimgrep /Sam/gj **/*
+:cfdo %s/Sam/Bob/gc | update
+
+---
+
+#! bash forloop
+
+for dir in ./*; do
+	mkdir ${dir}_flow
+	mkdir ${dir}_fillers
+	cd ${dir}
+done
+
+---
+
+#! Get the total size of every file changed in the last year
+
+find . -mtime -365 -type f | xargs wc -c
+
+---
+
+#! tar every folder in the folder
+
+for i in */; do tar -jcvf "${i%/}.tar.bz2" "$i"; done
+
+---
+
+#! tar every file in the folder
+
+for i in *; do tar -jcvf "${i%/}.tar.bz2" "$i"; done
+
+---
+
+#! Remove empty directories
+
+find . -type d -empty -exec rmdir {} \;
+
+---
+
+#! Find files by name
+
+find . -name "*Medicare*" -print 
+
+---
+
+#! Find files by size
+
+find . -size -99k -exec ls +
+
+---
+
+#! Remove all syncconflict files
+
+!r find ~ -name "*.sync-conflict-*" -exec rm {} + && read
+
+---
+
+#! Rename files with zmv
+
+zmv -n '(*).0001.TextGrid' '$1.TextGrid'
+
+---
+
+#! Extract audio from all files in folder
+
+for d in *.mp4 ; do
+	ffmpeg -i $d -ac 1 -ar 44100 $d.wav
+done
+
+---
+
+#! Turn every wav into an mp3
+
+for d in *.wav ; do
+	ffmpeg -i $d -codec:a libmp3lame -qscale:a 2 $d.mp3
+done
+
+---
+
+#! Concatenate all videos ending with .mp4
+
+printf "file %s \n" ./*.mp4 > mylist.txt && ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.mp4
+
+---
+
+#! Combine Four videos into grid
+
+ffmpeg -i input1.mp4 -i input2.mov -i input3.mov -i input4.mov -filter_complex "nullsrc=size=1920x1080 [base]; [0:v] setpts=PTS-STARTPTS, scale=960x540 [upperleft]; [1:v] setpts=PTS-STARTPTS, scale=960x540 [upperright]; [2:v] setpts=PTS-STARTPTS, scale=960x540 [lowerleft]; [3:v] setpts=PTS-STARTPTS, scale=960x540 [lowerright]; [base][upperleft] overlay=shortest=1 [tmp1]; [tmp1][upperright] overlay=shortest=1:x=960 [tmp2]; [tmp2][lowerleft] overlay=shortest=1:y=540 [tmp3]; [tmp3][lowerright] overlay=shortest=1:x=960:y=540" -c:v libx264 outputhd.mp4
+
+---
+
+#! Upscale video
+
+for d in *.mp4 ; do
+	filename=$(basename -- "$d")
+    fn="${filename%.*}"
+    modname="_big.mp4"
+    fnbig="$fn$modname"
+    echo $fn
+    ffmpeg -i $d -vf scale=1920x1080:flags=lanczos $fnbig
+done
+
+---
+
+#! Create a blank 30 second video
+
+ffmpeg -t 30 -s 640x480 -f rawvideo -pix_fmt rgb24 -r 25 -i /dev/zero empty.mpeg
+
+---
+
+#! Trim video by timestamps
+
+ffmpeg -t 30 -s 640x480 -f rawvideo -pix_fmt rgb24 -r 25 -i /dev/zero empty.mpeg
+
+---
+
+#! Rotate Video
+
+ffmpeg -i input.mp4 -filter:v "transpose=1,transpose=1" output_flip.mp4
+
+---
+
+#! Merge stereo to mono
+
+ffmpeg -i video.mp4 -map_channel 0.1.0 -map_channel 0.1.0 -c:v copy fixedaudio.mp4
+
+---
+
+#! Add marker file to folders
+
+for d in *london/ ; do
+    cd $d && touch gridsbylondon.txt && u
+done
+
+---
+
+#! Remove duplicate extensions
+
+zmv '(*).mp4.mp4' '$1.mp4'
+
+---
+
+#! Convert wav to mp3
+
+ffmpeg -i input.wav -vn -ar 44100 -ac 2 -b:a 192k output.mp3
+
+---
+
+#! Convert mkv to mp4
+
+ffmpeg -i "vid.mkv" -map 0 -c copy -c:a aac "MP4/vid.mp4"
+
+---
+
+#! Print all file contents with names
+
+for file in *.txt; do
+    echo "$(basename "$file") - $(cat "$file")"
+done
+
+---
+
+#! Run Thunderbird
+
+!r nohup ~/Documents/bin/gobble flatpak run org.mozilla.Thunderbird &
+
+---
+
+#! Open Chrome (UCSD)
+
+!r nohup ~/Documents/bin/gobble /usr/bin/flatpak run com.google.Chrome --args --profile-directory="Profile 2" https://mail.google.com/mail/u/0/#inbox &
+
+---
+
+#! Open Chrome (Will)
+
+!r nohup ~/Documents/bin/gobble /usr/bin/flatpak run com.google.Chrome --args --profile-directory="Profile 3" https://mail.google.com/mail/u/0/#inbox &
+
+---
+
+#! Run Ansible Local
+
+!r ansible-playbook ~/Documents/bin/ansible/local.yml --ask-become-pass
+
+---
+
+#! QMK Build - Nyquist 4
+
+cd ~/github/qmk_firmware && cp -r ~/Documents/bin/keebs/nyquist4/* ~/github/qmk_firmware/keyboards/keebio/nyquist/keymaps/wstyler/ && sudo util/docker_build.sh keebio/nyquist/rev4:wstyler:flash
+
+---
+
+#! Steam Kill
+
+!r flatpak kill com.valvesoftware.Steam
+
+---
+
+#! Remove file by extension
+
+find . -name "*.tmp" -delete
+
+---
+
+#! GIF from video ffmpeg
+
+ffmpeg -i showme.mkv \
+    -vf "fps=20,scale=600:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
+    -loop 0 asl_showme.gif
+
+---
+
+#! Compress PDF (screen/ebook/prepress/printer/default)
+
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
+
+---
+
+#! Append a thing to the start of every plaintext file in a folder
+
+find . -type f -name "*.md" -exec sh -c 'echo -e "%letg\n$(cat {})" > {}' \;
+
+
